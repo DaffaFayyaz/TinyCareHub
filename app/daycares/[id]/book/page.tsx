@@ -17,6 +17,17 @@ import type { DateRange } from "react-day-picker"
 import { format, differenceInDays } from "date-fns"
 import { daycareDetails } from "@/lib/daycare-data"
 import { notFound } from "next/navigation"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { CheckCircle2 } from "lucide-react"
+import { QRPaymentModal } from "@/components/qr-payment-modal"
 
 const formSchema = z.object({
     childName: z.string().min(1, "Child's name is required"),
@@ -30,16 +41,20 @@ const formSchema = z.object({
 export default function BookingPage({ params }: { params: { id: string } }) {
     const daycare = daycareDetails[Number(params.id)]
 
-    // If the daycare ID doesn't exist, show 404
     if (!daycare) {
         notFound()
     }
 
     const [dateRange, setDateRange] = useState<DateRange | undefined>()
     const [numberOfDays, setNumberOfDays] = useState<number>(0)
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const [showPaymentModal, setShowPaymentModal] = useState(false)
+    const [bookingSuccess, setBookingSuccess] = useState(false)
+    const [paymentSuccess, setPaymentSuccess] = useState(false)
+    const [bookingId, setBookingId] = useState("")
 
-    // Extract price from daycare price string (e.g., "$45/day" -> 45)
     const dailyPrice = Number(daycare.price.replace(/[^0-9.]/g, ""))
+    const totalPrice = dailyPrice * numberOfDays
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,7 +68,6 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         },
     })
 
-    // Update number of days and form values when date range changes
     useEffect(() => {
         if (dateRange?.from) {
             const formattedStartDate = format(dateRange.from, "yyyy-MM-dd")
@@ -63,11 +77,9 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                 const formattedEndDate = format(dateRange.to, "yyyy-MM-dd")
                 form.setValue("endDate", formattedEndDate)
 
-                // Calculate days including both start and end date
                 const days = differenceInDays(dateRange.to, dateRange.from) + 1
                 setNumberOfDays(days)
             } else {
-                // If only start date is selected, it's a single day booking
                 form.setValue("endDate", formattedStartDate)
                 setNumberOfDays(1)
             }
@@ -76,7 +88,6 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         }
     }, [dateRange, form])
 
-    // Update date range when form values change manually
     const updateDateRangeFromInputs = (startDateStr: string, endDateStr: string) => {
         if (startDateStr) {
             const startDate = new Date(startDateStr)
@@ -92,15 +103,44 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         }
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // This would handle the form submission
-        console.log(values)
+    const handleBookingClick = () => {
+        form.trigger().then((isValid) => {
+            if (isValid) {
+                setShowConfirmModal(true)
+            }
+        })
+    }
+
+    // Handle booking confirmation and show payment modal
+    function onConfirmBooking(values: z.infer<typeof formSchema>) {
+        const newBookingId = `BOOK-${Math.floor(Math.random() * 10000)}`
+        setBookingId(newBookingId)
+
+        setShowConfirmModal(false)
+        setShowPaymentModal(true)
+    }
+
+    const handlePaymentComplete = () => {
+        setShowPaymentModal(false)
+        setPaymentSuccess(true)
+        setBookingSuccess(true)
     }
 
     return (
         <div className="container py-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-3xl font-bold mb-6">Book {daycare.name}</h1>
+
+                {bookingSuccess && (
+                    <Alert className="mb-6 bg-green-50 border-green-200">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <AlertTitle className="text-green-800">Booking Successful!</AlertTitle>
+                        <AlertDescription className="text-green-700">
+                            Your booking at {daycare.name} has been confirmed and payment has been received. Booking ID: {bookingId}.
+                            You will receive a confirmation email shortly.
+                        </AlertDescription>
+                    </Alert>
+                )}
 
                 <div className="grid gap-8 md:grid-cols-2">
                     {/* Booking Form */}
@@ -111,7 +151,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                         </CardHeader>
                         <CardContent>
                             <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                <form onSubmit={form.handleSubmit(onConfirmBooking)} className="space-y-4">
                                     <FormField
                                         control={form.control}
                                         name="childName"
@@ -244,7 +284,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                             <Link href={`/daycares/${params.id}`}>
                                 <Button variant="outline">Cancel</Button>
                             </Link>
-                            <Button onClick={form.handleSubmit(onSubmit)}>Confirm Booking</Button>
+                            <Button onClick={handleBookingClick}>Confirm Booking</Button>
                         </CardFooter>
                     </Card>
 
@@ -296,13 +336,62 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                                     <Separator className="my-2" />
                                     <div className="flex justify-between font-bold">
                                         <span>Total</span>
-                                        <span>${(dailyPrice * numberOfDays).toFixed(2)}</span>
+                                        <span>${totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
                 </div>
+
+                {/* Confirmation Modal */}
+                <Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Confirm Your Booking</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to book {daycare.name} for {numberOfDays} day{numberOfDays !== 1 ? "s" : ""}?
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4">
+                            <div className="space-y-2 rounded-md border p-4">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <span className="text-sm font-medium">Child:</span>
+                                    <span className="text-sm">{form.getValues("childName")}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <span className="text-sm font-medium">Dates:</span>
+                                    <span className="text-sm">
+                    {form.getValues("startDate")} to {form.getValues("endDate")}
+                  </span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <span className="text-sm font-medium">Schedule:</span>
+                                    <span className="text-sm">{form.getValues("schedule")}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <span className="text-sm font-medium">Total Price:</span>
+                                    <span className="text-sm font-bold">${totalPrice.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setShowConfirmModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={form.handleSubmit(onConfirmBooking)}>Yes, Proceed to Payment</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                <QRPaymentModal
+                    open={showPaymentModal}
+                    onOpenChange={setShowPaymentModal}
+                    amount={totalPrice}
+                    bookingId={bookingId}
+                    daycareName={daycare.name}
+                    onPaymentComplete={handlePaymentComplete}
+                />
             </div>
         </div>
     )

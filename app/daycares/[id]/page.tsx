@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -8,10 +11,12 @@ import { daycareDetails, daycareReviews } from "@/lib/daycare-data"
 import Link from "next/link"
 import { Calendar, Clock, MapPin, MessageCircle, Star, Video } from "lucide-react"
 import { notFound } from "next/navigation"
+import { ReviewFormModal } from "@/components/review-form-modal"
 
 export default function DaycareDetailPage({ params }: { params: { id: string } }) {
   const daycare = daycareDetails[Number(params.id)]
   const reviews = daycareReviews[Number(params.id)] || []
+  const [reviewModalOpen, setReviewModalOpen] = useState(false)
 
   // If the daycare ID doesn't exist, show 404
   if (!daycare) {
@@ -106,7 +111,7 @@ export default function DaycareDetailPage({ params }: { params: { id: string } }
               <TabsContent value="reviews" className="space-y-4 pt-4">
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold text-lg">Parent Reviews</h3>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => setReviewModalOpen(true)}>
                     Write a Review
                   </Button>
                 </div>
@@ -166,6 +171,14 @@ export default function DaycareDetailPage({ params }: { params: { id: string } }
             </div>
           </div>
         </div>
+
+        {/* Review Modal */}
+        <ReviewFormModal
+            open={reviewModalOpen}
+            onOpenChange={setReviewModalOpen}
+            daycareId={daycare.id}
+            daycareName={daycare.name}
+        />
       </div>
   )
 }

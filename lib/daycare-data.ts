@@ -42,7 +42,7 @@ export const daycareListings: DaycareBasic[] = [
     {
         id: 1,
         name: "Sunshine Daycare Center",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare1.jpg?height=200&width=300",
         rating: 4.8,
         reviews: 124,
         price: "$45/day",
@@ -106,9 +106,9 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
     1: {
         id: 1,
         name: "Sunshine Daycare Center",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare1.jpg?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
+            "/daycare1.jpg?height=400&width=600",
             "/placeholder.svg?height=400&width=600",
             "/placeholder.svg?height=400&width=600",
         ],
