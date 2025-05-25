@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { BookingCard } from "@/components/booking-card"
 import { getAllBookings } from "@/lib/booking-data"
 import { useState } from "react"
-import { Calendar, Filter } from "lucide-react"
 import Link from "next/link"
 
 export default function BookingsPage() {

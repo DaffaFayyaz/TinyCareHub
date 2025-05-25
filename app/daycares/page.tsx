@@ -11,20 +11,19 @@ import { DaycareCard } from "@/components/daycare-card"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useState, useEffect } from "react"
-import { daycareListings } from "@/lib/daycare-data"
+import { daycareListings, extractPrice } from "@/lib/daycare-data"
 
 export default function DaycaresPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredDaycares, setFilteredDaycares] = useState(daycareListings)
   const [location, setLocation] = useState("all")
   const [minRating, setMinRating] = useState("4")
-  const [maxPrice, setMaxPrice] = useState(50)
+  const [maxPrice, setMaxPrice] = useState(800000) // 800,000 IDR
 
   // Filter daycares based on search query and filters
   useEffect(() => {
     let results = daycareListings
 
-    // Filter by search query (name or location)
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       results = results.filter(
@@ -32,7 +31,6 @@ export default function DaycaresPage() {
       )
     }
 
-    // Filter by location if not "all"
     if (location !== "all") {
       results = results.filter((daycare) => daycare.location.toLowerCase() === location.toLowerCase())
     }
@@ -45,8 +43,7 @@ export default function DaycaresPage() {
     // Filter by maximum price
     if (maxPrice) {
       results = results.filter((daycare) => {
-        // Extract numeric price from string like "$45/day"
-        const price = Number.parseFloat(daycare.price.replace(/[^0-9.]/g, ""))
+        const price = extractPrice(daycare.price)
         return price <= maxPrice
       })
     }
@@ -59,11 +56,7 @@ export default function DaycaresPage() {
     setSearchQuery(e.target.value)
   }
 
-  // Apply all filters
-  const applyFilters = () => {
-    // Filters are already applied via useEffect
-    // This function is for the "Apply Filters" button
-  }
+  const applyFilters = () => {}
 
   return (
       <div className="container py-8">
@@ -114,16 +107,17 @@ export default function DaycaresPage() {
                   <Label>Price Range (per day)</Label>
                   <div className="pt-4">
                     <Slider
-                        defaultValue={[50]}
-                        max={100}
-                        step={1}
+                        defaultValue={[800000]}
+                        max={1000000}
+                        min={400000}
+                        step={50000}
                         value={[maxPrice]}
                         onValueChange={(value) => setMaxPrice(value[0])}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>$30</span>
-                    <span>${maxPrice}</span>
+                    <span>Rp 400.000</span>
+                    <span>Rp {maxPrice.toLocaleString("id-ID")}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -176,7 +170,7 @@ export default function DaycaresPage() {
                       setSearchQuery("")
                       setLocation("all")
                       setMinRating("4")
-                      setMaxPrice(50)
+                      setMaxPrice(800000)
                     }}
                 >
                   Reset Filters

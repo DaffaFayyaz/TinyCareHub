@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { type Booking, getDaycareName, getDaycarePrice } from "@/lib/booking-data"
+import { type Booking, getDaycareName, calculateBookingPrice } from "@/lib/booking-data"
 import { Calendar, Clock, MapPin } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
@@ -16,7 +16,6 @@ interface BookingCardProps {
 
 export function BookingCard({ booking }: BookingCardProps) {
     const daycareName = getDaycareName(booking.daycareId)
-    const daycarePrice = getDaycarePrice(booking.daycareId)
     const [reviewModalOpen, setReviewModalOpen] = useState(false)
     const [modifyModalOpen, setModifyModalOpen] = useState(false)
     const [isModified, setIsModified] = useState(false)
@@ -27,12 +26,12 @@ export function BookingCard({ booking }: BookingCardProps) {
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    // Calculate total price
-    const pricePerDay = Number(daycarePrice.replace(/[^0-9.]/g, ""))
+    // Calculate total price using the helper function
+    const totalPrice = calculateBookingPrice(booking.daycareId, booking.startDate, booking.endDate)
     const startDate = new Date(booking.startDate)
     const endDate = new Date(booking.endDate)
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
-    const totalPrice = pricePerDay * days
+    const pricePerDay = Math.round(totalPrice / days)
 
     // Determine badge color based on status
     const getBadgeVariant = (status: Booking["status"]) => {
@@ -53,6 +52,36 @@ export function BookingCard({ booking }: BookingCardProps) {
     // Format status for display
     const formatStatus = (status: Booking["status"]) => {
         return status.charAt(0).toUpperCase() + status.slice(1)
+    }
+
+    // Format schedule for display
+    const formatSchedule = (schedule: string) => {
+        switch (schedule) {
+            case "full-day":
+                return "Full Day (7AM-6PM)"
+            case "morning":
+                return "Morning (7AM-12PM)"
+            case "afternoon":
+                return "Afternoon (1PM-6PM)"
+            default:
+                return schedule
+        }
+    }
+
+    // Format child age for display
+    const formatChildAge = (age: string) => {
+        switch (age) {
+            case "infant":
+                return "Infant (0-1 years)"
+            case "toddler":
+                return "Toddler (1-3 years)"
+            case "preschool":
+                return "Preschool (3-5 years)"
+            case "school-age":
+                return "School Age (5+ years)"
+            default:
+                return age
+        }
     }
 
     // Handle booking modification
@@ -101,13 +130,7 @@ export function BookingCard({ booking }: BookingCardProps) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-muted-foreground">Schedule</p>
-                                        <p className="text-sm font-medium">
-                                            {booking.schedule === "full-day"
-                                                ? "Full Day (7AM-6PM)"
-                                                : booking.schedule === "morning"
-                                                    ? "Morning (7AM-12PM)"
-                                                    : "Afternoon (1PM-6PM)"}
-                                        </p>
+                                        <p className="text-sm font-medium">{formatSchedule(booking.schedule)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -117,22 +140,14 @@ export function BookingCard({ booking }: BookingCardProps) {
                             <div className="text-right">
                                 <p className="text-sm text-muted-foreground">Child</p>
                                 <p className="font-medium">{booking.childName}</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {booking.childAge === "infant"
-                                        ? "Infant (0-1)"
-                                        : booking.childAge === "toddler"
-                                            ? "Toddler (1-3)"
-                                            : booking.childAge === "preschool"
-                                                ? "Preschool (3-5)"
-                                                : "School Age (5+)"}
-                                </p>
+                                <p className="text-sm text-muted-foreground">{formatChildAge(booking.childAge)}</p>
                             </div>
 
                             <div className="text-right mt-2 md:mt-0">
                                 <p className="text-sm text-muted-foreground">Total</p>
-                                <p className="font-bold">${totalPrice.toFixed(2)}</p>
+                                <p className="font-bold">Rp {totalPrice.toLocaleString("id-ID")}</p>
                                 <p className="text-xs text-muted-foreground">
-                                    {days} days @ {daycarePrice}
+                                    {days} days @ Rp {pricePerDay.toLocaleString("id-ID")}/day
                                 </p>
                             </div>
                         </div>

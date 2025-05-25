@@ -108,7 +108,7 @@ export function ReviewFormModal({ open, onOpenChange, daycareId, daycareName, bo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
                 <DialogHeader>
                     <DialogTitle>Write a Review</DialogTitle>
                     <DialogDescription>
@@ -128,128 +128,136 @@ export function ReviewFormModal({ open, onOpenChange, daycareId, daycareName, bo
                         </p>
                     </div>
                 ) : (
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                            {/* Star Rating */}
-                            <div className="space-y-2">
-                                <Label htmlFor="rating">Rating</Label>
-                                <div className="flex items-center gap-1">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            onClick={() => handleStarClick(star)}
-                                            onMouseEnter={() => handleStarHover(star)}
-                                            onMouseLeave={handleStarLeave}
-                                            className="focus:outline-none"
-                                        >
-                                            <Star
-                                                className={`h-8 w-8 ${
-                                                    star <= (hoverRating || rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                                                }`}
-                                            />
-                                        </button>
-                                    ))}
-                                </div>
-                                {form.formState.errors.rating && (
-                                    <p className="text-sm font-medium text-destructive">{form.formState.errors.rating.message}</p>
-                                )}
-                            </div>
-
-                            {/* Review Title */}
-                            <FormField
-                                control={form.control}
-                                name="title"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Review Title</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Summarize your experience" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* Review Content */}
-                            <FormField
-                                control={form.control}
-                                name="content"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Your Review</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="Share details about your experience at this daycare"
-                                                className="min-h-[120px]"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* Photo Upload */}
-                            <div className="space-y-2">
-                                <Label>Add Photos (Optional)</Label>
-                                <div className="grid grid-cols-4 gap-2">
-                                    {uploadedImages.map((image, index) => (
-                                        <div key={index} className="relative aspect-square rounded-md overflow-hidden border">
-                                            <img
-                                                src={image || "/placeholder.svg"}
-                                                alt={`Uploaded ${index + 1}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => removeImage(index)}
-                                                className="absolute top-1 right-1 bg-black/50 rounded-full p-1"
-                                            >
-                                                <X className="h-3 w-3 text-white" />
-                                            </button>
+                    <div className="flex flex-col min-h-0 overflow-hidden">
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col min-h-0 overflow-hidden">
+                                {/* Scrollable Content */}
+                                <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+                                    {/* Star Rating */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="rating">Rating</Label>
+                                        <div className="flex items-center gap-1">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    onClick={() => handleStarClick(star)}
+                                                    onMouseEnter={() => handleStarHover(star)}
+                                                    onMouseLeave={handleStarLeave}
+                                                    className="focus:outline-none"
+                                                >
+                                                    <Star
+                                                        className={`h-7 w-7 ${
+                                                            star <= (hoverRating || rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                                                        }`}
+                                                    />
+                                                </button>
+                                            ))}
                                         </div>
-                                    ))}
-                                    {uploadedImages.length < 4 && (
-                                        <label className="border border-dashed rounded-md flex flex-col items-center justify-center cursor-pointer aspect-square hover:bg-muted/50">
-                                            <Upload className="h-5 w-5 text-muted-foreground mb-1" />
-                                            <span className="text-xs text-muted-foreground">Upload</span>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={handleImageUpload}
-                                                multiple={uploadedImages.length < 3}
-                                            />
-                                        </label>
-                                    )}
+                                        {form.formState.errors.rating && (
+                                            <p className="text-sm font-medium text-destructive">{form.formState.errors.rating.message}</p>
+                                        )}
+                                    </div>
+
+                                    {/* Review Title */}
+                                    <FormField
+                                        control={form.control}
+                                        name="title"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Review Title</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Summarize your experience" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {/* Review Content */}
+                                    <FormField
+                                        control={form.control}
+                                        name="content"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Your Review</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        placeholder="Share details about your experience at this daycare"
+                                                        className="min-h-[100px]"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {/* Photo Upload */}
+                                    <div className="space-y-2">
+                                        <Label>Add Photos (Optional)</Label>
+                                        <div className="grid grid-cols-4 gap-2">
+                                            {uploadedImages.map((image, index) => (
+                                                <div key={index} className="relative aspect-square rounded-md overflow-hidden border">
+                                                    <img
+                                                        src={image || "/placeholder.svg"}
+                                                        alt={`Uploaded ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(index)}
+                                                        className="absolute top-1 right-1 bg-black/50 rounded-full p-1"
+                                                    >
+                                                        <X className="h-3 w-3 text-white" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            {uploadedImages.length < 4 && (
+                                                <label className="border border-dashed rounded-md flex flex-col items-center justify-center cursor-pointer aspect-square hover:bg-muted/50">
+                                                    <Upload className="h-4 w-4 text-muted-foreground mb-1" />
+                                                    <span className="text-xs text-muted-foreground">Upload</span>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        className="hidden"
+                                                        onChange={handleImageUpload}
+                                                        multiple={uploadedImages.length < 3}
+                                                    />
+                                                </label>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">You can upload up to 4 photos</p>
+                                    </div>
+
+                                    <Alert className="bg-blue-50 border-blue-200">
+                                        <AlertDescription className="text-blue-700 text-sm">
+                                            Your review will be publicly visible to help other parents make informed decisions.
+                                        </AlertDescription>
+                                    </Alert>
                                 </div>
-                                <p className="text-xs text-muted-foreground">You can upload up to 4 photos</p>
-                            </div>
 
-                            <Alert className="bg-blue-50 border-blue-200">
-                                <AlertDescription className="text-blue-700">
-                                    Your review will be publicly visible to help other parents make informed decisions.
-                                </AlertDescription>
-                            </Alert>
-
-                            <DialogFooter>
-                                <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
-                                    Cancel
-                                </Button>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Submitting...
-                                        </>
-                                    ) : (
-                                        "Submit Review"
-                                    )}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
+                                {/* Fixed Footer */}
+                                <div className="flex-shrink-0 pt-4 border-t mt-4">
+                                    <DialogFooter>
+                                        <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit" disabled={isSubmitting}>
+                                            {isSubmitting ? (
+                                                <>
+                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                    Submitting...
+                                                </>
+                                            ) : (
+                                                "Submit Review"
+                                            )}
+                                        </Button>
+                                    </DialogFooter>
+                                </div>
+                            </form>
+                        </Form>
+                    </div>
                 )}
             </DialogContent>
         </Dialog>

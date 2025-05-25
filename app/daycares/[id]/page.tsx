@@ -31,19 +31,29 @@ export default function DaycareDetailPage({ params }: { params: { id: string } }
             {/* Image Gallery */}
             <div className="rounded-lg overflow-hidden">
               <img
-                  src={daycare.images[0] || "/placeholder.svg"}
+                  src={daycare.images[0] || "/placeholder.svg?height=400&width=800"}
                   alt={daycare.name}
                   className="w-full h-[400px] object-cover"
               />
               <div className="grid grid-cols-3 gap-2 mt-2">
-                {daycare.images.slice(1).map((image, index) => (
+                {daycare.images.slice(1, 4).map((image, index) => (
                     <img
                         key={index}
-                        src={image || "/placeholder.svg"}
+                        src={image || "/placeholder.svg?height=128&width=200"}
                         alt={`${daycare.name} ${index + 2}`}
                         className="w-full h-32 object-cover rounded-md"
                     />
                 ))}
+                {/* Ensure we always show 3 thumbnails */}
+                {daycare.images.length < 4 &&
+                    Array.from({ length: 4 - daycare.images.length }).map((_, index) => (
+                        <div
+                            key={`placeholder-${index}`}
+                            className="w-full h-32 bg-muted rounded-md flex items-center justify-center"
+                        >
+                          <span className="text-muted-foreground text-sm">No image</span>
+                        </div>
+                    ))}
               </div>
             </div>
 

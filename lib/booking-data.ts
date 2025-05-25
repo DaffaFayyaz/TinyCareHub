@@ -1,6 +1,6 @@
 // This file serves as a mock database for booking information
 
-import { daycareDetails } from "./daycare-data"
+import { daycareDetails, extractPrice } from "./daycare-data"
 
 export interface Booking {
     id: string
@@ -167,7 +167,13 @@ export function getDaycareName(id: number) {
 
 // Function to get daycare price by ID
 export function getDaycarePrice(id: number) {
-    return daycareDetails[id]?.price || "$0/day"
+    return daycareDetails[id]?.price || "Rp 0/hari"
+}
+
+// Function to get numeric price for calculations
+export function getDaycarePriceNumeric(id: number): number {
+    const priceString = getDaycarePrice(id)
+    return extractPrice(priceString)
 }
 
 // Function to get children currently in daycare (ongoing bookings for today)
@@ -176,4 +182,13 @@ export function getChildrenInDaycare() {
     return bookings.filter(
         (booking) => booking.status === "ongoing" && booking.startDate <= today && booking.endDate >= today,
     )
+}
+
+// Function to calculate total booking price
+export function calculateBookingPrice(daycareId: number, startDate: string, endDate: string): number {
+    const dailyPrice = getDaycarePriceNumeric(daycareId)
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1
+    return dailyPrice * days
 }

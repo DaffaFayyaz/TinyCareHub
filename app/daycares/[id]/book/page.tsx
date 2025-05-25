@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,10 +13,10 @@ import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import type { DateRange } from "react-day-picker"
 import { format, differenceInDays } from "date-fns"
-import { daycareDetails } from "@/lib/daycare-data"
+import { daycareDetails, extractPrice } from "@/lib/daycare-data"
 import { notFound } from "next/navigation"
 import {
     Dialog,
@@ -41,6 +42,7 @@ const formSchema = z.object({
 export default function BookingPage({ params }: { params: { id: string } }) {
     const daycare = daycareDetails[Number(params.id)]
 
+    // If the daycare ID doesn't exist, show 404
     if (!daycare) {
         notFound()
     }
@@ -53,7 +55,8 @@ export default function BookingPage({ params }: { params: { id: string } }) {
     const [paymentSuccess, setPaymentSuccess] = useState(false)
     const [bookingId, setBookingId] = useState("")
 
-    const dailyPrice = Number(daycare.price.replace(/[^0-9.]/g, ""))
+    // Extract price from daycare price string
+    const dailyPrice = extractPrice(daycare.price)
     const totalPrice = dailyPrice * numberOfDays
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -68,6 +71,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         },
     })
 
+    // Update number of days and form values when date range changes
     useEffect(() => {
         if (dateRange?.from) {
             const formattedStartDate = format(dateRange.from, "yyyy-MM-dd")
@@ -77,9 +81,11 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                 const formattedEndDate = format(dateRange.to, "yyyy-MM-dd")
                 form.setValue("endDate", formattedEndDate)
 
+                // Calculate days including both start and end date
                 const days = differenceInDays(dateRange.to, dateRange.from) + 1
                 setNumberOfDays(days)
             } else {
+                // If only start date is selected, it's a single day booking
                 form.setValue("endDate", formattedStartDate)
                 setNumberOfDays(1)
             }
@@ -88,6 +94,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         }
     }, [dateRange, form])
 
+    // Update date range when form values change manually
     const updateDateRangeFromInputs = (startDateStr: string, endDateStr: string) => {
         if (startDateStr) {
             const startDate = new Date(startDateStr)
@@ -103,6 +110,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
         }
     }
 
+    // Handle form validation and show confirmation modal
     const handleBookingClick = () => {
         form.trigger().then((isValid) => {
             if (isValid) {
@@ -113,13 +121,16 @@ export default function BookingPage({ params }: { params: { id: string } }) {
 
     // Handle booking confirmation and show payment modal
     function onConfirmBooking(values: z.infer<typeof formSchema>) {
+        // Generate a random booking ID
         const newBookingId = `BOOK-${Math.floor(Math.random() * 10000)}`
         setBookingId(newBookingId)
 
+        // Close confirmation modal and show payment modal
         setShowConfirmModal(false)
         setShowPaymentModal(true)
     }
 
+    // Handle payment completion
     const handlePaymentComplete = () => {
         setShowPaymentModal(false)
         setPaymentSuccess(true)
@@ -327,7 +338,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                                 <div className="space-y-2">
                                     <div className="flex justify-between">
                                         <span>Daycare Fee</span>
-                                        <span>{daycare.price}</span>
+                                        <span>Rp {dailyPrice.toLocaleString("id-ID")}/hari</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Number of Days</span>
@@ -336,7 +347,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                                     <Separator className="my-2" />
                                     <div className="flex justify-between font-bold">
                                         <span>Total</span>
-                                        <span>${totalPrice.toFixed(2)}</span>
+                                        <span>Rp {totalPrice.toLocaleString("id-ID")}</span>
                                     </div>
                                 </div>
                             </CardContent>
@@ -371,7 +382,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     <span className="text-sm font-medium">Total Price:</span>
-                                    <span className="text-sm font-bold">${totalPrice.toFixed(2)}</span>
+                                    <span className="text-sm font-bold">Rp {totalPrice.toLocaleString("id-ID")}</span>
                                 </div>
                             </div>
                         </div>
@@ -384,6 +395,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                     </DialogContent>
                 </Dialog>
 
+                {/* Payment Modal */}
                 <QRPaymentModal
                     open={showPaymentModal}
                     onOpenChange={setShowPaymentModal}

@@ -45,7 +45,7 @@ const initialMessages = [
     avatar: "/placeholder.svg?height=40&width=40",
     message: "Here's Emma during arts and crafts! She's making a beautiful painting.",
     time: "11:30 AM",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/chat.webp?height=200&width=300",
   },
   {
     id: 5,

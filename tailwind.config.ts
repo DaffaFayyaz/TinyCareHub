@@ -73,9 +73,26 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      animationDelay: {
+        "200": "200ms",
+        "400": "400ms",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    ({ addUtilities }: { addUtilities: any }) => {
+      const newUtilities = {
+        ".animation-delay-200": {
+          "animation-delay": "200ms",
+        },
+        ".animation-delay-400": {
+          "animation-delay": "400ms",
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
 } satisfies Config
 
 export default config

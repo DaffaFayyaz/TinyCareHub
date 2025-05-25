@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { getBookingById, getDaycareName } from "@/lib/booking-data"
+import { getBookingById, getDaycareName, calculateBookingPrice } from "@/lib/booking-data"
 import { daycareDetails } from "@/lib/daycare-data"
 import { notFound } from "next/navigation"
 import Link from "next/link"
@@ -26,17 +26,20 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
     const daycare = daycareDetails[booking.daycareId]
     const daycareName = getDaycareName(booking.daycareId)
 
+    // Format dates for display
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    const pricePerDay = Number(daycare.price.replace(/[^0-9.]/g, ""))
+    // Calculate total price using the helper function
+    const totalPrice = calculateBookingPrice(booking.daycareId, booking.startDate, booking.endDate)
     const startDate = new Date(booking.startDate)
     const endDate = new Date(booking.endDate)
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
-    const totalPrice = pricePerDay * days
+    const pricePerDay = Math.round(totalPrice / days)
 
+    // Determine badge color based on status
     const getBadgeVariant = (status: string) => {
         switch (status) {
             case "ongoing":
@@ -52,10 +55,12 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
         }
     }
 
+    // Format status for display
     const formatStatus = (status: string) => {
         return status.charAt(0).toUpperCase() + status.slice(1)
     }
 
+    // Format schedule for display
     const formatSchedule = (schedule: string) => {
         switch (schedule) {
             case "full-day":
@@ -69,6 +74,7 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
         }
     }
 
+    // Format child age for display
     const formatChildAge = (age: string) => {
         switch (age) {
             case "infant":
@@ -84,8 +90,10 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
         }
     }
 
+    // Handle booking modification
     const handleBookingModified = () => {
         setIsModified(true)
+        // In a real app, you would refetch the booking data here
     }
 
     return (
@@ -171,11 +179,11 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
                                         <h3 className="text-sm font-medium text-muted-foreground">Payment</h3>
                                         <div className="flex justify-between items-center mt-1">
                                             <span>Daily Rate:</span>
-                                            <span>{daycare.price}</span>
+                                            <span>Rp {pricePerDay.toLocaleString("id-ID")}/hari</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span>Total:</span>
-                                            <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                                            <span className="font-bold">Rp {totalPrice.toLocaleString("id-ID")}</span>
                                         </div>
                                         <p className="text-xs text-muted-foreground mt-1">Paid on {formatDate(booking.startDate)}</p>
                                     </div>
@@ -310,6 +318,7 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
                 </div>
             </div>
 
+            {/* Review Modal */}
             <ReviewFormModal
                 open={reviewModalOpen}
                 onOpenChange={setReviewModalOpen}
@@ -318,6 +327,7 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
                 bookingId={booking.id}
             />
 
+            {/* Modify Booking Modal */}
             <ModifyBookingModal
                 open={modifyModalOpen}
                 onOpenChange={setModifyModalOpen}

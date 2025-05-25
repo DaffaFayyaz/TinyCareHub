@@ -22,7 +22,7 @@ import { Loader2, CheckCircle2, CalendarIcon, AlertCircle, CreditCard } from "lu
 import { format, differenceInDays, addDays, isBefore } from "date-fns"
 import type { DateRange } from "react-day-picker"
 import type { Booking } from "@/lib/booking-data"
-import { getDaycarePrice } from "@/lib/booking-data"
+import { getDaycarePriceNumeric } from "@/lib/booking-data"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { QRPaymentModal } from "@/components/qr-payment-modal"
 
@@ -57,8 +57,7 @@ export function ModifyBookingModal({
     const [modificationId, setModificationId] = useState("")
 
     // Get daycare price
-    const daycarePrice = getDaycarePrice(booking.daycareId)
-    const dailyPrice = Number(daycarePrice.replace(/[^0-9.]/g, ""))
+    const dailyPrice = getDaycarePriceNumeric(booking.daycareId)
     const totalPrice = dailyPrice * numberOfDays
     const additionalPrice = dailyPrice * additionalDays
 
@@ -322,19 +321,19 @@ export function ModifyBookingModal({
                                     <Separator className="my-1" />
                                     <div className="flex justify-between font-medium">
                                         <span>Original Price:</span>
-                                        <span>${(dailyPrice * originalNumberOfDays).toFixed(2)}</span>
+                                        <span>Rp {(dailyPrice * originalNumberOfDays).toLocaleString("id-ID")}</span>
                                     </div>
                                     {additionalDays > 0 && (
                                         <>
                                             <div className="flex justify-between text-primary font-medium">
                                                 <span>Additional Days:</span>
                                                 <span>
-                          {additionalDays} days (${additionalPrice.toFixed(2)})
+                          {additionalDays} days (Rp {additionalPrice.toLocaleString("id-ID")})
                         </span>
                                             </div>
                                             <div className="flex justify-between font-bold">
                                                 <span>New Total Price:</span>
-                                                <span>${totalPrice.toFixed(2)}</span>
+                                                <span>Rp {totalPrice.toLocaleString("id-ID")}</span>
                                             </div>
                                         </>
                                     )}
@@ -345,7 +344,8 @@ export function ModifyBookingModal({
                                 <Alert className="bg-yellow-50 border-yellow-200">
                                     <CreditCard className="h-4 w-4 text-yellow-600" />
                                     <AlertDescription className="text-yellow-700 text-xs">
-                                        You will be charged ${additionalPrice.toFixed(2)} for the {additionalDays} additional day
+                                        You will be charged Rp {additionalPrice.toLocaleString("id-ID")} for the {additionalDays} additional
+                                        day
                                         {additionalDays !== 1 ? "s" : ""} using your original payment method.
                                     </AlertDescription>
                                 </Alert>

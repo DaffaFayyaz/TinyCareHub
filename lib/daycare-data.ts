@@ -45,57 +45,57 @@ export const daycareListings: DaycareBasic[] = [
         image: "/daycare1.jpg?height=200&width=300",
         rating: 4.8,
         reviews: 124,
-        price: "$45/day",
+        price: "Rp 675.000/hari",
         location: "Downtown",
         description: "A bright and cheerful environment where children can learn and play.",
     },
     {
         id: 2,
         name: "Little Explorers Childcare",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare5.jpg?height=200&width=300",
         rating: 4.6,
         reviews: 98,
-        price: "$40/day",
+        price: "Rp 600.000/hari",
         location: "Westside",
         description: "Focused on early childhood development through exploration and play.",
     },
     {
         id: 3,
         name: "Tiny Tots Academy",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare10.jpg?height=200&width=300",
         rating: 4.9,
         reviews: 156,
-        price: "$50/day",
+        price: "Rp 750.000/hari",
         location: "Northside",
         description: "Premium childcare with a structured learning curriculum for all ages.",
     },
     {
         id: 4,
         name: "Happy Kids Daycare",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare11.webp?height=200&width=300",
         rating: 4.7,
         reviews: 112,
-        price: "$42/day",
+        price: "Rp 630.000/hari",
         location: "Eastside",
         description: "A home-like environment where children feel comfortable and secure.",
     },
     {
         id: 5,
         name: "Bright Beginnings",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/learning-centers.jpg?height=200&width=300",
         rating: 4.5,
         reviews: 87,
-        price: "$38/day",
+        price: "Rp 570.000/hari",
         location: "Southside",
         description: "Nurturing care with a focus on creative development and social skills.",
     },
     {
         id: 6,
         name: "Little Learners Daycare",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare2.jpg?height=200&width=300",
         rating: 4.7,
         reviews: 103,
-        price: "$44/day",
+        price: "Rp 660.000/hari",
         location: "Central",
         description: "Educational childcare that prepares your little ones for school success.",
     },
@@ -106,15 +106,16 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
     1: {
         id: 1,
         name: "Sunshine Daycare Center",
-        image: "/daycare1.jpg?height=200&width=300",
+        image: "/placeholder.svg?height=200&width=300",
         images: [
             "/daycare1.jpg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/daycare1.2.webp?height=400&width=600",
+            "/daycare2.jpg?height=400&width=600",
+            "/daycare3.webp?height=400&width=600",
         ],
         rating: 4.8,
         reviews: 124,
-        price: "$45/day",
+        price: "Rp 675.000/hari",
         location: "Downtown",
         fullLocation: "123 Main St, Downtown",
         description: "A bright and cheerful environment where children can learn and play.",
@@ -161,13 +162,14 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
         name: "Little Explorers Childcare",
         image: "/placeholder.svg?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/daycare5.jpg?height=400&width=600",
+            "/daycare6.jpeg?height=400&width=600",
+            "/daycare7.jpeg?height=400&width=600",
+            "/daycare8.jpeg?height=400&width=600",
         ],
         rating: 4.6,
         reviews: 98,
-        price: "$40/day",
+        price: "Rp 600.000/hari",
         location: "Westside",
         fullLocation: "456 West Avenue, Westside",
         description: "Focused on early childhood development through exploration and play.",
@@ -214,13 +216,14 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
         name: "Tiny Tots Academy",
         image: "/placeholder.svg?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/daycare10.jpg?height=200&width=300",
+            "/daycare2.jpg?height=400&width=600",
+            "/daycare5.jpg?height=400&width=600",
+            "/daycare1.jpg?height=400&width=600",
         ],
         rating: 4.9,
         reviews: 156,
-        price: "$50/day",
+        price: "Rp 750.000/hari",
         location: "Northside",
         fullLocation: "789 North Boulevard, Northside",
         description: "Premium childcare with a structured learning curriculum for all ages.",
@@ -278,15 +281,16 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
     4: {
         id: 4,
         name: "Happy Kids Daycare",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "/daycare11.webp?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/daycare11.webp?height=400&width=600",
+            "/daycare10.jpg?height=400&width=600",
+            "/daycare2.jpg?height=400&width=600",
+            "/daycare5.jpg?height=400&width=600",
         ],
         rating: 4.7,
         reviews: 112,
-        price: "$42/day",
+        price: "Rp 630.000/hari",
         location: "Eastside",
         fullLocation: "321 East Street, Eastside",
         description: "A home-like environment where children feel comfortable and secure.",
@@ -333,13 +337,14 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
         name: "Bright Beginnings",
         image: "/placeholder.svg?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/learning-centers.jpg?height=400&width=600",
+            "/daycare1.jpg?height=400&width=600",
+            "/daycare10.jpg?height=400&width=600",
+            "/daycare11.webp?height=400&width=600"
         ],
         rating: 4.5,
         reviews: 87,
-        price: "$38/day",
+        price: "Rp 570.000/hari",
         location: "Southside",
         fullLocation: "567 South Road, Southside",
         description: "Nurturing care with a focus on creative development and social skills.",
@@ -386,13 +391,14 @@ export const daycareDetails: Record<number, DaycareDetailed> = {
         name: "Little Learners Daycare",
         image: "/placeholder.svg?height=200&width=300",
         images: [
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
-            "/placeholder.svg?height=400&width=600",
+            "/daycare2.jpg?height=400&width=600",
+            "/daycare10.jpg?height=400&width=600",
+            "/daycare7.jpeg?height=400&width=600",
+            "/daycare8.jpeg?height=400&width=600"
         ],
         rating: 4.7,
         reviews: 103,
-        price: "$44/day",
+        price: "Rp 660.000/hari",
         location: "Central",
         fullLocation: "890 Central Avenue, Central",
         description: "Educational childcare that prepares your little ones for school success.",
@@ -447,7 +453,7 @@ export const daycareReviews: Record<number, Review[]> = {
     1: [
         {
             id: 1,
-            author: "Sarah Johnson",
+            author: "Arthur",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "2 months ago",
@@ -456,7 +462,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "Michael Chen",
+            author: "Daffa",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "3 months ago",
@@ -465,7 +471,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Jessica Williams",
+            author: "Gibran",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "1 month ago",
@@ -476,7 +482,7 @@ export const daycareReviews: Record<number, Review[]> = {
     2: [
         {
             id: 1,
-            author: "David Miller",
+            author: "Cris",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "1 month ago",
@@ -485,7 +491,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "Amanda Rodriguez",
+            author: "Edward",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "2 months ago",
@@ -494,7 +500,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Thomas Lee",
+            author: "Arthur",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "3 weeks ago",
@@ -505,7 +511,7 @@ export const daycareReviews: Record<number, Review[]> = {
     3: [
         {
             id: 1,
-            author: "Jennifer Smith",
+            author: "Daffa",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "2 weeks ago",
@@ -514,7 +520,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "Robert Taylor",
+            author: "Braven",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "1 month ago",
@@ -523,7 +529,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Emily Wilson",
+            author: "Cris",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "6 weeks ago",
@@ -534,7 +540,7 @@ export const daycareReviews: Record<number, Review[]> = {
     4: [
         {
             id: 1,
-            author: "Daniel Brown",
+            author: "Gibran",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "3 weeks ago",
@@ -543,7 +549,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "Lauren Garcia",
+            author: "Edward",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "1 month ago",
@@ -552,7 +558,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Kevin Martinez",
+            author: "Braven",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "2 months ago",
@@ -563,7 +569,7 @@ export const daycareReviews: Record<number, Review[]> = {
     5: [
         {
             id: 1,
-            author: "Michelle Johnson",
+            author: "Daffa",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "1 month ago",
@@ -572,7 +578,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "James Wilson",
+            author: "Edward",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "3 weeks ago",
@@ -581,7 +587,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Nicole Adams",
+            author: "Arthur",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "2 months ago",
@@ -592,7 +598,7 @@ export const daycareReviews: Record<number, Review[]> = {
     6: [
         {
             id: 1,
-            author: "Brian Clark",
+            author: "Cris",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "3 weeks ago",
@@ -601,7 +607,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 2,
-            author: "Sophia Martinez",
+            author: "Braven",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 4,
             date: "1 month ago",
@@ -610,7 +616,7 @@ export const daycareReviews: Record<number, Review[]> = {
         },
         {
             id: 3,
-            author: "Andrew Thompson",
+            author: "Edward",
             avatar: "/placeholder.svg?height=40&width=40",
             rating: 5,
             date: "2 months ago",
@@ -618,4 +624,13 @@ export const daycareReviews: Record<number, Review[]> = {
                 "We've tried several daycares and Little Learners is by far the best for academic preparation. My son's vocabulary and math skills have improved dramatically. The science exploration activities are particularly impressive!",
         },
     ],
+}
+
+export function extractPrice(priceString: string): number {
+    const numericString = priceString.replace(/[^\d]/g, "")
+    return Number.parseInt(numericString, 10)
+}
+
+export function formatIDR(amount: number): string {
+    return `Rp ${amount.toLocaleString("id-ID")}`
 }

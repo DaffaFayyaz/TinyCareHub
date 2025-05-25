@@ -127,7 +127,7 @@ export default function CCTVPage() {
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Current Staff:</span>
-                            <span>Ms. Sarah, Mr. James</span>
+                            <span>Ms. Gibran, Mr. Arthur</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Children Present:</span>
@@ -140,15 +140,43 @@ export default function CCTVPage() {
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        {[1, 2, 3, 4].map((i) => (
-                          <div key={i} className="aspect-video bg-muted rounded-md overflow-hidden">
-                            <img
-                              src="/placeholder.svg?height=100&width=160"
-                              alt={`${room.name} Thumbnail ${i}`}
+                        {/*{[1, 2, 3, 4].map((i) => (*/}
+                        {/*  <div key={i} className="aspect-video bg-muted rounded-md overflow-hidden">*/}
+                        {/*    <img*/}
+                        {/*      src="/placeholder.svg?height=100&width=160"*/}
+                        {/*      alt={`${room.name} Thumbnail ${i}`}*/}
+                        {/*      className="w-full h-full object-cover"*/}
+                        {/*    />*/}
+                        {/*  </div>*/}
+                        {/*))}*/}
+                        <div className="aspect-video bg-muted rounded-md overflow-hidden">
+                          <img
+                              src="/daycare1.jpg?height=100&width=160"
+                              alt={`${room.name} Thumbnail`}
                               className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ))}
+                          />
+                        </div>
+                        <div className="aspect-video bg-muted rounded-md overflow-hidden">
+                          <img
+                              src="/daycare2.jpg?height=100&width=160"
+                              alt={`${room.name} Thumbnail`}
+                              className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="aspect-video bg-muted rounded-md overflow-hidden">
+                          <img
+                              src="/daycare5.jpg?height=100&width=160"
+                              alt={`${room.name} Thumbnail`}
+                              className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="aspect-video bg-muted rounded-md overflow-hidden">
+                          <img
+                              src="/daycare10.jpg?height=100&width=160"
+                              alt={`${room.name} Thumbnail`}
+                              className="w-full h-full object-cover"
+                          />
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
@@ -167,14 +195,14 @@ export default function CCTVPage() {
             </CardHeader>
             <CardContent>
               <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                className="rounded-md border"
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  className="rounded-md border"
               />
               <div className="mt-4 space-y-2">
                 <div className="flex justify-between items-center">
-                  <Button variant="outline" size="sm" className="gap-1">
+                <Button variant="outline" size="sm" className="gap-1">
                     <ChevronLeft className="h-4 w-4" />
                     Previous Day
                   </Button>
